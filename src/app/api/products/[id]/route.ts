@@ -73,21 +73,38 @@ async function handleRequest(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
 ) {
-  return handleRequest(request, "GET", params);
+  const { id } = await context.params;
+  console.log(`GET request for product with ID: ${id}`);
+  return handleRequest(request, "GET", { id });
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
 ) {
-  return handleRequest(request, "PUT", params);
+  const { id } = await context.params;
+  console.log("PUT request for product ID:", id);
+  return handleRequest(request, "PUT", { id });
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
 ) {
-  return handleRequest(request, "DELETE", params);
+  const { id } = await context.params;
+  return handleRequest(request, "DELETE", { id });
 }

@@ -4,13 +4,14 @@ import { fetcher } from "@/api/xhr";
 import { HTTPResponse, UpdateUserData } from "@/types/global";
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const session = await getSession();
 
     if (!session?.user) {
@@ -28,9 +29,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const userData: UpdateUserData = await request.json();
-    userData.id = params.id;
+    userData.id = id;
 
-    const response = await fetcher<HTTPResponse>(`/staff/${params.id}`, {
+    const response = await fetcher<HTTPResponse>(`/staff/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
@@ -55,6 +56,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params;
     const session = await getSession();
 
     if (!session?.user) {
@@ -71,7 +73,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const response = await fetcher<HTTPResponse>(`/staff/${params.id}`, {
+    const response = await fetcher<HTTPResponse>(`/staff/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
