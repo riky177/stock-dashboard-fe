@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { SmallAddIcon } from "@chakra-ui/icons";
+import { FiPlus } from "react-icons/fi";
 import { useState, useEffect, useCallback } from "react";
 import type {
   Product,
@@ -140,7 +140,7 @@ export default function ProductTable() {
           isEdit={false}
           trigger={
             <Button colorPalette="blue" onClick={handleAddNew} p={2} gap="2px">
-              <SmallAddIcon />
+              <FiPlus />
               Add Product
             </Button>
           }

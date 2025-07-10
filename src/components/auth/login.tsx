@@ -15,7 +15,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useColorModeValue } from "@/components/ui/color-mode";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -126,7 +126,7 @@ export default function Login() {
                           setShowPassword((showPassword) => !showPassword)
                         }
                       >
-                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                        {showPassword ? <FiEye /> : <FiEyeOff />}
                       </Button>
                     }
                   >

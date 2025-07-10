@@ -34,6 +34,7 @@ async function handleRequest(
       );
     }
 
+    // Forward request to backend API
     const backendUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${id}`;
 
     const headers: HeadersInit = {

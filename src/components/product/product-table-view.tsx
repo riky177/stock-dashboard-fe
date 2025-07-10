@@ -12,7 +12,7 @@ import {
   Portal,
   CloseButton,
 } from "@chakra-ui/react";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useMemo, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { AgGridReact } from "ag-grid-react";
@@ -84,7 +84,7 @@ export default function ProductTableView({
                 variant="ghost"
                 onClick={() => handleEdit(params.data!)}
               >
-                <EditIcon />
+                <FiEdit />
               </Button>
             }
           />
@@ -92,7 +92,7 @@ export default function ProductTableView({
           <Dialog.Root>
             <Dialog.Trigger asChild>
               <Button size="sm" colorScheme="red" variant="ghost">
-                <DeleteIcon />
+                <FiTrash2 />
               </Button>
             </Dialog.Trigger>
             <Portal>

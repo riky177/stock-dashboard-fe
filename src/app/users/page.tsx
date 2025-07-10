@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Heading, Button, Flex, Box, Text, Spinner } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { FiPlus } from "react-icons/fi";
 import { useUsers } from "@/hooks/use-users";
 import { CreateUserData } from "@/types/global";
 import UserTableView from "@/components/user/user-table-view";
@@ -78,8 +78,8 @@ export default function UsersPage() {
         <UserForm
           onSubmit={handleSubmit}
           trigger={
-            <Button colorPalette="blue">
-              <AddIcon mr={2} />
+            <Button colorPalette="blue" gap="2">
+              <FiPlus />
               Add New Staff
             </Button>
           }

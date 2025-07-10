@@ -12,7 +12,7 @@ import {
   Portal,
   CloseButton,
 } from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { FiTrash2 } from "react-icons/fi";
 import { useMemo, useCallback } from "react";
 import { AgGridReact } from "ag-grid-react";
 import {
@@ -52,7 +52,7 @@ export default function UserTableView({
           <Dialog.Root>
             <Dialog.Trigger asChild>
               <Button size="sm" colorScheme="red" variant="ghost">
-                <DeleteIcon />
+                <FiTrash2 />
               </Button>
             </Dialog.Trigger>
             <Portal>
