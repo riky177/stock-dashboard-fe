@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Input, InputGroup, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Input, InputGroup, VStack } from "@chakra-ui/react";
 import { CATEGORIES } from "@/hooks/use-products";
 import type { ProductFilters } from "@/types/global";
 import { AiOutlineClose } from "react-icons/ai";
@@ -21,9 +21,6 @@ export default function ProductFilters({
     <VStack gap={4} mb={6}>
       <Flex wrap="wrap" gap={4} width="100%">
         <Box flex="1" minW="200px">
-          <Text fontWeight="semibold" mb={2}>
-            Search
-          </Text>
           <InputGroup
             endElement={
               filters.name ? (
@@ -43,9 +40,6 @@ export default function ProductFilters({
         </Box>
 
         <Box flex="1" minW="150px">
-          <Text fontWeight="semibold" mb={2}>
-            Category
-          </Text>
           <select
             value={filters.category || ""}
             onChange={(e) => onFiltersChange({ category: e.target.value })}
@@ -67,12 +61,9 @@ export default function ProductFilters({
         </Box>
 
         <Box flex="1" minW="120px">
-          <Text fontWeight="semibold" mb={2}>
-            Min Price
-          </Text>
           <Input
             type="number"
-            placeholder="0"
+            placeholder="Min Price"
             value={filters.min_price || ""}
             onChange={(e) =>
               onFiltersChange({
@@ -85,12 +76,9 @@ export default function ProductFilters({
         </Box>
 
         <Box flex="1" minW="120px">
-          <Text fontWeight="semibold" mb={2}>
-            Max Price
-          </Text>
           <Input
             type="number"
-            placeholder="0"
+            placeholder="Max Price"
             value={filters.max_price || ""}
             onChange={(e) =>
               onFiltersChange({

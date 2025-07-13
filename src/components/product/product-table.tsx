@@ -17,8 +17,10 @@ import ProductTableView from "./product-table-view";
 import ProductPagination from "./product-pagination";
 import { useColorModeValue } from "../ui/color-mode";
 import { toaster } from "../ui/toaster";
+import { useSession } from "next-auth/react";
 
 export default function ProductTable() {
+  const { data } = useSession();
   const bgColor = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.600");
 
@@ -125,30 +127,31 @@ export default function ProductTable() {
       border="1px"
       borderColor={borderColor}
     >
-      {/* Header */}
       <Flex justify="space-between" align="center" mb={6}>
         <Text fontSize="2xl" fontWeight="bold">
           Product Inventory
         </Text>
-        <ProductForm
-          onSubmit={handleFormSubmit}
-          product={null}
-          isEdit={false}
-          trigger={(onTrigger) => (
-            <Button
-              colorPalette="blue"
-              onClick={() => {
-                handleAddNew();
-                onTrigger();
-              }}
-              p={2}
-              gap="2px"
-            >
-              <FiPlus />
-              Add Product
-            </Button>
-          )}
-        />
+        {data?.user?.role === "admin" && (
+          <ProductForm
+            onSubmit={handleFormSubmit}
+            product={null}
+            isEdit={false}
+            trigger={(onTrigger) => (
+              <Button
+                colorPalette="blue"
+                onClick={() => {
+                  handleAddNew();
+                  onTrigger();
+                }}
+                p={2}
+                gap="2px"
+              >
+                <FiPlus />
+                Add Product
+              </Button>
+            )}
+          />
+        )}
       </Flex>
 
       <ProductFilters filters={filters} onFiltersChange={handleFiltersChange} />

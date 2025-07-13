@@ -169,7 +169,6 @@ export default function UserForm({
                     <Field.Label>Password</Field.Label>
                     <Input
                       name="password"
-                      type="password"
                       value={formData.password}
                       onChange={handleInputChange}
                     />

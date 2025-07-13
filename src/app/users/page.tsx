@@ -78,7 +78,7 @@ export default function UsersPage() {
     <Box maxW="7xl" mx="auto" py={8} px={4}>
       <Flex justify="space-between" align="center" mb={6}>
         <Heading size="2xl" fontWeight="bold">
-          Staff
+          Staff Management
         </Heading>
         <UserForm
           onSubmit={handleSubmit}

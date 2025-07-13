@@ -30,7 +30,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Product", icon: FiHome, url: "/" },
   {
-    name: "Staff Management",
+    name: "Staff",
     icon: FiTrendingUp,
     url: "/users",
     private: true,
@@ -73,7 +73,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       bg={useColorModeValue("white", "gray.900")}
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: 60 }}
+      // w={{ base: "full", md: 60 }}
+      minW={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
       {...rest}
@@ -100,7 +101,14 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         })}
       </Flex>
       <Box position="absolute" bottom={0} w="full" p={4}>
-        <Text textAlign="center">{session?.user.email || ""}</Text>
+        <Text
+          textAlign="center"
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
+        >
+          {session?.user.email || ""}
+        </Text>
         <Button
           colorPalette="red"
           size="sm"
