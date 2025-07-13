@@ -80,7 +80,6 @@ export async function GET(
   }
 ) {
   const { id } = await context.params;
-  console.log(`GET request for product with ID: ${id}`);
   return handleRequest(request, "GET", { id });
 }
 
@@ -93,7 +92,6 @@ export async function PUT(
   }
 ) {
   const { id } = await context.params;
-  console.log("PUT request for product ID:", id);
   return handleRequest(request, "PUT", { id });
 }
 

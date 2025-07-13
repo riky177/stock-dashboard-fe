@@ -2,7 +2,9 @@
 
 import React, { ReactNode } from "react";
 import { useSession } from "next-auth/react";
-import Navbar from "./navbar";
+// import Navbar from "./navbar";
+import { Toaster } from "./ui/toaster";
+import Sidebar from "./sidebar";
 
 interface ContainerProps {
   children: ReactNode;
@@ -14,8 +16,8 @@ const Container = ({ children }: ContainerProps) => {
   if (session) {
     return (
       <>
-        <Navbar />
-        {children}
+        <Toaster />
+        <Sidebar>{children}</Sidebar>
       </>
     );
   }

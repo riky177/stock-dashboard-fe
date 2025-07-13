@@ -30,6 +30,7 @@ import type {
   UpdateProductData,
 } from "@/types/global";
 import ProductForm from "./product-form";
+import { formatInTimeZone } from "date-fns-tz";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -51,13 +52,6 @@ export default function ProductTableView({
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === "admin";
 
-  const handleEdit = useCallback(
-    (product: Product) => {
-      onEdit(product);
-    },
-    [onEdit]
-  );
-
   const handleDelete = useCallback(
     async (productId: string) => {
       onDelete(productId);
@@ -77,16 +71,19 @@ export default function ProductTableView({
             onSubmit={onSubmit}
             product={params.data!}
             isEdit={true}
-            trigger={
+            trigger={(onTrigger) => (
               <Button
                 size="sm"
                 colorScheme="blue"
                 variant="ghost"
-                onClick={() => handleEdit(params.data!)}
+                onClick={() => {
+                  onTrigger();
+                  onEdit(params.data!);
+                }}
               >
                 <FiEdit />
               </Button>
-            }
+            )}
           />
 
           <Dialog.Root>
@@ -123,7 +120,7 @@ export default function ProductTableView({
         </HStack>
       );
     },
-    [handleEdit, handleDelete, onSubmit, isAdmin]
+    [isAdmin, onSubmit, onEdit, handleDelete]
   );
 
   const ProductNameCellRenderer = useCallback(
@@ -150,7 +147,7 @@ export default function ProductTableView({
 
   const PriceCellRenderer = useCallback(
     (params: ICellRendererParams<Product>) => {
-      return `$${params.value.toFixed(2)}`;
+      return `Rp ${new Intl.NumberFormat("id-ID").format(params.value)}`;
     },
     []
   );
@@ -171,7 +168,22 @@ export default function ProductTableView({
 
   const CreatedDateCellRenderer = useCallback(
     (params: ICellRendererParams<Product>) => {
-      return new Date(params.data?.created_at || "").toLocaleDateString();
+      return formatInTimeZone(
+        params.data?.createdAt || "",
+        "UTC",
+        "dd/MM/yyyy HH:mm"
+      );
+    },
+    []
+  );
+
+  const UpdatedDateCellRenderer = useCallback(
+    (params: ICellRendererParams<Product>) => {
+      return formatInTimeZone(
+        params.data?.updatedAt || "",
+        "UTC",
+        "dd/MM/yyyy HH:mm"
+      );
     },
     []
   );
@@ -213,6 +225,13 @@ export default function ProductTableView({
         flex: 1,
         minWidth: 120,
       },
+      {
+        field: "updatedAt",
+        headerName: "Updated",
+        cellRenderer: UpdatedDateCellRenderer,
+        flex: 1,
+        minWidth: 120,
+      },
     ];
 
     if (isAdmin) {
@@ -222,7 +241,7 @@ export default function ProductTableView({
         cellRenderer: ActionsCellRenderer,
         flex: 1,
         minWidth: 120,
-        maxWidth: 150,
+        headerClass: () => "custom-center-header",
       });
     }
 
@@ -233,13 +252,14 @@ export default function ProductTableView({
     PriceCellRenderer,
     StockCellRenderer,
     CreatedDateCellRenderer,
-    ActionsCellRenderer,
+    UpdatedDateCellRenderer,
     isAdmin,
+    ActionsCellRenderer,
   ]);
 
   if (loading) {
     return (
-      <Flex justify="center" align="center" py={8}>
+      <Flex justify="center" align="center" py={40}>
         <Spinner size="lg" />
         <Text ml={4}>Loading products...</Text>
       </Flex>
@@ -247,7 +267,7 @@ export default function ProductTableView({
   }
 
   return (
-    <Box className="ag-theme-alpine" h="400px" w="100%">
+    <Box className="ag-theme-alpine" h="472px" w="100%">
       <AgGridReact
         rowData={products}
         columnDefs={columnDefs}
@@ -255,12 +275,7 @@ export default function ProductTableView({
         domLayout="normal"
         theme="legacy"
         suppressHorizontalScroll={true}
-        onGridReady={(params) => {
-          params.api.sizeColumnsToFit();
-        }}
-        onGridSizeChanged={(params) => {
-          params.api.sizeColumnsToFit();
-        }}
+        overlayNoRowsTemplate="No products available"
       />
     </Box>
   );

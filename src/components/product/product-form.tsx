@@ -9,16 +9,18 @@ import {
   Dialog,
   Portal,
   CloseButton,
+  InputGroup,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Product, CreateProductData, UpdateProductData } from "@/types/global";
 import { CATEGORIES } from "@/hooks/use-products";
+import { toaster } from "../ui/toaster";
 
 interface ProductFormProps {
   onSubmit: (data: CreateProductData | UpdateProductData) => Promise<void>;
   product?: Product | null;
   isEdit?: boolean;
-  trigger: React.ReactNode;
+  trigger: (onTrigger: () => void) => React.ReactNode;
 }
 
 const DefaultValueForm = {
@@ -37,6 +39,7 @@ export default function ProductForm({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(DefaultValueForm);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isOpen, setIsOpen] = useState(false);
 
   function resetForm() {
     setFormData(DefaultValueForm);
@@ -69,12 +72,28 @@ export default function ProductForm({
     if (!formData.category.trim()) {
       newErrors.category = "Category is required";
     }
-    if (formData.stock < 0) {
+    if (formData.stock <= 0) {
       newErrors.stock = "Stock cannot be negative";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (field: string, value: string | number) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const onTriggerClick = () => {
+    setIsOpen(true);
+  };
+
+  const onCloseDialog = () => {
+    setIsOpen(false);
+    resetForm();
   };
 
   const handleSubmit = async () => {
@@ -87,32 +106,29 @@ export default function ProductForm({
 
       await onSubmit(submitData);
 
-      alert(
-        `Product ${formData.name} has been ${
+      toaster.success({
+        description: `Product ${formData.name} has been ${
           isEdit ? "updated" : "created"
-        } successfully.`
-      );
-    } catch (error) {
-      alert(
-        `Error: ${
-          error instanceof Error ? error.message : "Something went wrong"
-        }`
-      );
+        } successfully.`,
+      });
+    } catch {
+      toaster.error({
+        description: `Failed to ${isEdit ? "update" : "create"} product.`,
+      });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleInputChange = (field: string, value: string | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
+      onCloseDialog();
     }
   };
 
   return (
-    <Dialog.Root onExitComplete={resetForm}>
-      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+    <Dialog.Root
+      open={isOpen}
+      onExitComplete={onCloseDialog}
+      onFocusOutside={onCloseDialog}
+      closeOnInteractOutside={false}
+    >
+      <Dialog.Trigger asChild>{trigger(onTriggerClick)}</Dialog.Trigger>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -145,20 +161,19 @@ export default function ProductForm({
                   <Text fontWeight="bold" mb={2}>
                     Price *
                   </Text>
-                  <Input
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) =>
-                      handleInputChange(
-                        "price",
-                        parseFloat(e.target.value) || 0
-                      )
-                    }
-                    placeholder="0.00"
-                    step="0.01"
-                    min="0"
-                    borderColor={errors.price ? "red.500" : undefined}
-                  />
+                  <InputGroup startElement="Rp">
+                    <Input
+                      value={formData.price || ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                          handleInputChange("price", parseFloat(value) || 0);
+                        }
+                      }}
+                      placeholder="0"
+                      borderColor={errors.price ? "red.500" : undefined}
+                    />
+                  </InputGroup>
                   {errors.price && (
                     <Text color="red.500" fontSize="sm">
                       {errors.price}
@@ -204,13 +219,16 @@ export default function ProductForm({
                     Stock *
                   </Text>
                   <Input
-                    type="number"
-                    value={formData.stock}
-                    onChange={(e) =>
-                      handleInputChange("stock", parseInt(e.target.value) || 0)
-                    }
+                    type="text"
+                    value={formData.stock || ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Only allow integers (no decimal point for stock)
+                      if (value === "" || /^\d+$/.test(value)) {
+                        handleInputChange("stock", parseInt(value) || 0);
+                      }
+                    }}
                     placeholder="0"
-                    min="0"
                     borderColor={errors.stock ? "red.500" : undefined}
                   />
                   {errors.stock && (
@@ -224,20 +242,21 @@ export default function ProductForm({
 
             <Dialog.Footer>
               <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Cancel</Button>
-              </Dialog.ActionTrigger>
-              <Dialog.ActionTrigger asChild>
-                <Button
-                  colorScheme="blue"
-                  onClick={handleSubmit}
-                  loading={loading}
-                >
-                  {isEdit ? "Update" : "Create"} Product
+                <Button variant="outline" onClick={onCloseDialog}>
+                  Cancel
                 </Button>
               </Dialog.ActionTrigger>
+
+              <Button
+                colorScheme="blue"
+                onClick={handleSubmit}
+                loading={loading}
+              >
+                {isEdit ? "Update" : "Create"} Product
+              </Button>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
-              <CloseButton size="sm" />
+              <CloseButton size="sm" onClick={onCloseDialog} />
             </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>

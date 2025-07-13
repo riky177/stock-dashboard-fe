@@ -72,15 +72,12 @@ export default function Login() {
       <Stack mx={"auto"} maxW={"lg"} py={12} px={6} w={"full"}>
         <Stack align={"center"}>
           <Heading
-            fontSize={"6xl"}
+            fontSize={"5xl"}
             textAlign={"center"}
-            mb={8}
+            mb={14}
             color={"blue.500"}
           >
-            Stock Dashboard
-          </Heading>
-          <Heading fontSize={"4xl"} textAlign={"center"} mb={2}>
-            Login
+            Inventory Dashboard
           </Heading>
         </Stack>
         <form onSubmit={handleSubmit}>

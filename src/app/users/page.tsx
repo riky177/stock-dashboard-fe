@@ -10,6 +10,7 @@ import { CreateUserData } from "@/types/global";
 import UserTableView from "@/components/user/user-table-view";
 import UserForm from "@/components/user/user-form";
 import Container from "@/components/container";
+import { toaster } from "@/components/ui/toaster";
 
 export default function UsersPage() {
   const { data: session, status } = useSession();
@@ -48,9 +49,13 @@ export default function UsersPage() {
   const handleDelete = async (userId: string) => {
     try {
       await deleteUser(userId);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-      alert("Failed to delete user. Please try again.");
+      toaster.success({
+        description: "User deleted successfully",
+      });
+    } catch {
+      toaster.error({
+        description: "Failed to delete user",
+      });
     }
   };
 
@@ -72,8 +77,8 @@ export default function UsersPage() {
   return (
     <Box maxW="7xl" mx="auto" py={8} px={4}>
       <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="lg" color="blue.600">
-          Staff Management
+        <Heading size="2xl" fontWeight="bold">
+          Staff
         </Heading>
         <UserForm
           onSubmit={handleSubmit}

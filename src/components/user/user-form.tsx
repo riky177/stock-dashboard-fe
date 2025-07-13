@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { CreateUserData } from "@/types/global";
 import { ReactNode, useState, useEffect } from "react";
+import { toaster } from "../ui/toaster";
 
 interface UserFormProps {
   onSubmit: (data: CreateUserData) => Promise<void>;
@@ -73,6 +74,7 @@ export default function UserForm({
       ...prev,
       [name]: value,
     }));
+    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -89,6 +91,7 @@ export default function UserForm({
 
     setIsSubmitting(true);
     try {
+      // Only create new users, editing is disabled
       const createData: CreateUserData = {
         ...formData,
         role: "staff",
@@ -102,8 +105,11 @@ export default function UserForm({
       });
       setErrors({});
       onClose?.();
-    } catch (error) {
-      console.error("Error submitting user form:", error);
+      toaster.success({ description: "Succes to create user." });
+    } catch {
+      toaster.error({
+        description: "Failed to create user. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -127,6 +133,7 @@ export default function UserForm({
       onOpenChange={handleOpenChange}
       onExitComplete={resetForm}
       onFocusOutside={resetForm}
+      closeOnInteractOutside={false}
     >
       {trigger && (
         <Dialog.Trigger asChild onClick={() => setIsOpen(true)}>
@@ -180,15 +187,13 @@ export default function UserForm({
                   Cancel
                 </Button>
               </Dialog.ActionTrigger>
-              <Dialog.ActionTrigger asChild>
-                <Button
-                  onClick={handleFormSubmit}
-                  loading={isSubmitting}
-                  colorScheme="blue"
-                >
-                  Create User
-                </Button>
-              </Dialog.ActionTrigger>
+              <Button
+                onClick={handleFormSubmit}
+                loading={isSubmitting}
+                colorScheme="blue"
+              >
+                Create User
+              </Button>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
               <CloseButton size="sm" />

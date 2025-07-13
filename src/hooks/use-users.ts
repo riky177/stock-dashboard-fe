@@ -58,8 +58,8 @@ export const useUsers = (): UseUsersResult => {
 
         const result: HTTPResponse<UsersResponse> = await response.json();
 
-        if (result.success && result.data) {
-          setUsers(result.data);
+        if (result.success) {
+          setUsers(result.data || []);
         } else {
           setError(result.message || "Failed to fetch users");
         }

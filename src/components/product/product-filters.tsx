@@ -1,8 +1,9 @@
 "use client";
 
-import { Box, Flex, Input, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Input, InputGroup, Text, VStack } from "@chakra-ui/react";
 import { CATEGORIES } from "@/hooks/use-products";
 import type { ProductFilters } from "@/types/global";
+import { AiOutlineClose } from "react-icons/ai";
 
 interface ProductFiltersProps {
   filters: ProductFilters;
@@ -13,6 +14,9 @@ export default function ProductFilters({
   filters,
   onFiltersChange,
 }: ProductFiltersProps) {
+  const handleClearSearch = () => {
+    onFiltersChange({ name: "" });
+  };
   return (
     <VStack gap={4} mb={6}>
       <Flex wrap="wrap" gap={4} width="100%">
@@ -20,11 +24,22 @@ export default function ProductFilters({
           <Text fontWeight="semibold" mb={2}>
             Search
           </Text>
-          <Input
-            placeholder="Search products..."
-            value={filters.name || ""}
-            onChange={(e) => onFiltersChange({ name: e.target.value })}
-          />
+          <InputGroup
+            endElement={
+              filters.name ? (
+                <AiOutlineClose
+                  cursor={"pointer"}
+                  onClick={handleClearSearch}
+                />
+              ) : undefined
+            }
+          >
+            <Input
+              placeholder="Search products..."
+              value={filters.name || ""}
+              onChange={(e) => onFiltersChange({ name: e.target.value })}
+            />
+          </InputGroup>
         </Box>
 
         <Box flex="1" minW="150px">
@@ -57,7 +72,7 @@ export default function ProductFilters({
           </Text>
           <Input
             type="number"
-            placeholder="0.00"
+            placeholder="0"
             value={filters.min_price || ""}
             onChange={(e) =>
               onFiltersChange({
@@ -75,7 +90,7 @@ export default function ProductFilters({
           </Text>
           <Input
             type="number"
-            placeholder="1000.00"
+            placeholder="0"
             value={filters.max_price || ""}
             onChange={(e) =>
               onFiltersChange({

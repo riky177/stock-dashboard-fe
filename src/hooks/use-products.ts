@@ -73,7 +73,7 @@ export function useProducts() {
           method: "GET",
         });
 
-        setProducts(response.data.products);
+        setProducts(response.data.products || []);
         setPagination({
           page: response.data.page,
           limit: response.data.limit,

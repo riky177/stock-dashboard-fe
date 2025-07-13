@@ -83,12 +83,8 @@ export default function ProductTable() {
         await deleteProduct(productId);
         await fetchProducts(filters);
         toaster.success({ description: "Product deleted successfully" });
-      } catch (error) {
-        alert(
-          `Error: ${
-            error instanceof Error ? error.message : "Failed to delete product"
-          }`
-        );
+      } catch {
+        toaster.error({ description: "Failed to delete product" });
       }
     },
     [deleteProduct, fetchProducts, filters]
@@ -138,19 +134,25 @@ export default function ProductTable() {
           onSubmit={handleFormSubmit}
           product={null}
           isEdit={false}
-          trigger={
-            <Button colorPalette="blue" onClick={handleAddNew} p={2} gap="2px">
+          trigger={(onTrigger) => (
+            <Button
+              colorPalette="blue"
+              onClick={() => {
+                handleAddNew();
+                onTrigger();
+              }}
+              p={2}
+              gap="2px"
+            >
               <FiPlus />
               Add Product
             </Button>
-          }
+          )}
         />
       </Flex>
 
-      {/* Filters */}
       <ProductFilters filters={filters} onFiltersChange={handleFiltersChange} />
 
-      {/* Table */}
       <ProductTableView
         products={products}
         loading={loading}
@@ -159,7 +161,6 @@ export default function ProductTable() {
         onSubmit={handleFormSubmit}
       />
 
-      {/* Pagination */}
       {!loading && products?.length > 0 && (
         <ProductPagination
           pagination={pagination}
