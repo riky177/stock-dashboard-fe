@@ -70,7 +70,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
   `;
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+    <Box h="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       {/* Overlay for mobile */}
       {open && !isDesktop && (
         <Box
@@ -92,6 +92,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
         top="0"
         h="100vh"
         w={{ base: "100vw", md: "240px" }}
+        maxW={{ base: "100vw", md: "240px" }}
         bg={useColorModeValue("white", "gray.900")}
         borderRight="1px"
         borderRightColor={useColorModeValue("gray.200", "gray.700")}
@@ -106,6 +107,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
           md: "none",
         }}
         display={{ base: open ? "block" : "none", md: "block" }}
+        overflow="hidden"
       >
         <SidebarContent onClose={onClose} />
       </Box>
@@ -133,7 +135,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   };
 
   return (
-    <Box w="full" display="flex" flexDirection="column" h="100%" {...rest}>
+    <Box w="full" h="100%" position="relative" overflow="hidden" {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text
           fontSize="2xl"
@@ -145,6 +147,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
+      
+      {/* Navigation Links */}
       <Flex direction="column" gap={2}>
         {LinkItems.map((link) => {
           if (session?.user.role != "admin" && link.private) return null;
@@ -160,19 +164,26 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           );
         })}
       </Flex>
+
+      {/* User Info and Logout */}
       <Flex
-        flex={1}
-        justifyContent="flex-end"
-        w="full"
+        mt={6}
+        mx={4}
         p={4}
         flexDir="column"
-        align="center"
+        gap={3}
+        bg={useColorModeValue("gray.50", "gray.800")}
+        borderRadius="lg"
+        border="1px"
+        borderColor={useColorModeValue("gray.200", "gray.700")}
       >
         <Text
+          fontSize="sm"
           textAlign="center"
           whiteSpace="nowrap"
           overflow="hidden"
           textOverflow="ellipsis"
+          color={useColorModeValue("gray.600", "gray.400")}
         >
           {session?.user.email || ""}
         </Text>
@@ -181,7 +192,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           size="sm"
           onClick={handleLogout}
           width="full"
-          mt={2}
         >
           Logout
         </Button>
