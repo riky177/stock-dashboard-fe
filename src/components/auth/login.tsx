@@ -72,9 +72,12 @@ export default function Login() {
       <Stack mx={"auto"} maxW={"lg"} py={12} px={6} w={"full"}>
         <Stack align={"center"}>
           <Heading
-            fontSize={"5xl"}
+            fontSize={{
+              base: "2xl",
+              md: "4xl",
+            }}
             textAlign={"center"}
-            mb={14}
+            mb={{ base: 4, md: 14 }}
             color={"blue.500"}
           >
             Inventory Dashboard

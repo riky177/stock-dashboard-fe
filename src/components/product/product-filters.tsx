@@ -19,36 +19,35 @@ export default function ProductFilters({
   };
   return (
     <VStack gap={4} mb={6}>
-      <Flex wrap="wrap" gap={4} width="100%">
-        <Box flex="1" minW="200px">
-          <InputGroup
-            endElement={
-              filters.name ? (
-                <AiOutlineClose
-                  cursor={"pointer"}
-                  onClick={handleClearSearch}
-                />
-              ) : undefined
-            }
-          >
-            <Input
-              placeholder="Search products..."
-              value={filters.name || ""}
-              onChange={(e) => onFiltersChange({ name: e.target.value })}
-            />
-          </InputGroup>
-        </Box>
+      <Box width="100%">
+        <InputGroup
+          endElement={
+            filters.name ? (
+              <AiOutlineClose cursor={"pointer"} onClick={handleClearSearch} />
+            ) : undefined
+          }
+        >
+          <Input
+            placeholder="Search products..."
+            value={filters.name || ""}
+            size="sm"
+            onChange={(e) => onFiltersChange({ name: e.target.value })}
+          />
+        </InputGroup>
+      </Box>
 
-        <Box flex="1" minW="150px">
+      <Flex direction={{ base: "column", md: "row" }} gap={4} width="100%">
+        <Box flex="1" minW={{ base: "100%", md: "150px" }}>
           <select
             value={filters.category || ""}
             onChange={(e) => onFiltersChange({ category: e.target.value })}
             style={{
               width: "100%",
-              padding: "8px",
+              padding: "6px 8px",
               borderRadius: "6px",
               border: "1px solid #E2E8F0",
               backgroundColor: "white",
+              fontSize: "14px",
             }}
           >
             <option value="">All Categories</option>
@@ -60,35 +59,39 @@ export default function ProductFilters({
           </select>
         </Box>
 
-        <Box flex="1" minW="120px">
-          <Input
-            type="number"
-            placeholder="Min Price"
-            value={filters.min_price || ""}
-            onChange={(e) =>
-              onFiltersChange({
-                min_price: e.target.value
-                  ? parseFloat(e.target.value)
-                  : undefined,
-              })
-            }
-          />
-        </Box>
+        <Flex direction="row" gap={4} flex="1">
+          <Box flex="1" minW={{ base: "100px", sm: "120px" }}>
+            <Input
+              type="number"
+              placeholder="Min Price"
+              value={filters.min_price || ""}
+              size="sm"
+              onChange={(e) =>
+                onFiltersChange({
+                  min_price: e.target.value
+                    ? parseFloat(e.target.value)
+                    : undefined,
+                })
+              }
+            />
+          </Box>
 
-        <Box flex="1" minW="120px">
-          <Input
-            type="number"
-            placeholder="Max Price"
-            value={filters.max_price || ""}
-            onChange={(e) =>
-              onFiltersChange({
-                max_price: e.target.value
-                  ? parseFloat(e.target.value)
-                  : undefined,
-              })
-            }
-          />
-        </Box>
+          <Box flex="1" minW={{ base: "100px", sm: "120px" }}>
+            <Input
+              type="number"
+              placeholder="Max Price"
+              value={filters.max_price || ""}
+              size="sm"
+              onChange={(e) =>
+                onFiltersChange({
+                  max_price: e.target.value
+                    ? parseFloat(e.target.value)
+                    : undefined,
+                })
+              }
+            />
+          </Box>
+        </Flex>
       </Flex>
     </VStack>
   );

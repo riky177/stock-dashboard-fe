@@ -20,7 +20,7 @@ import { toaster } from "../ui/toaster";
 import { useSession } from "next-auth/react";
 
 export default function ProductTable() {
-  const { data } = useSession();
+  const { data, status } = useSession();
   const bgColor = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.600");
 
@@ -47,10 +47,10 @@ export default function ProductTable() {
   }, [getFiltersFromUrl]);
 
   useEffect(() => {
-    if (Object.keys(filters).length > 0) {
+    if (Object.keys(filters).length > 0 && status === "authenticated") {
       fetchProducts(filters);
     }
-  }, [filters, fetchProducts]);
+  }, [filters, fetchProducts, status]);
 
   const handleFiltersChange = useCallback(
     (newFilters: Partial<ProductFiltersType>) => {
@@ -128,7 +128,7 @@ export default function ProductTable() {
       borderColor={borderColor}
     >
       <Flex justify="space-between" align="center" mb={6}>
-        <Text fontSize="2xl" fontWeight="bold">
+        <Text fontSize={{ base: "md", md: "2xl" }} fontWeight="bold">
           Product Inventory
         </Text>
         {data?.user?.role === "admin" && (
@@ -136,12 +136,11 @@ export default function ProductTable() {
             onSubmit={handleFormSubmit}
             product={null}
             isEdit={false}
-            trigger={(onTrigger) => (
+            trigger={
               <Button
                 colorPalette="blue"
                 onClick={() => {
                   handleAddNew();
-                  onTrigger();
                 }}
                 p={2}
                 gap="2px"
@@ -149,7 +148,7 @@ export default function ProductTable() {
                 <FiPlus />
                 Add Product
               </Button>
-            )}
+            }
           />
         )}
       </Flex>

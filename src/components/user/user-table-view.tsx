@@ -49,15 +49,15 @@ export default function UserTableView({
     (params: ICellRendererParams<User>) => {
       return (
         <HStack>
-          <Dialog.Root>
+          <Dialog.Root size="sm">
             <Dialog.Trigger asChild>
-              <Button size="sm" colorScheme="red" variant="ghost">
+              <Button colorScheme="red" variant="ghost">
                 <FiTrash2 />
               </Button>
             </Dialog.Trigger>
             <Portal>
               <Dialog.Backdrop />
-              <Dialog.Positioner>
+              <Dialog.Positioner px={{ base: 4, md: 0 }}>
                 <Dialog.Content>
                   <Dialog.Header>
                     <Dialog.Title>Delete User</Dialog.Title>

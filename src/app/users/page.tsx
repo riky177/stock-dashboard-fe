@@ -77,7 +77,7 @@ export default function UsersPage() {
   return (
     <Box maxW="7xl" mx="auto" py={8} px={4}>
       <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="2xl" fontWeight="bold">
+        <Heading size={{ base: "md", md: "2xl" }} fontWeight="bold">
           Staff Management
         </Heading>
         <UserForm
@@ -85,7 +85,7 @@ export default function UsersPage() {
           trigger={
             <Button colorPalette="blue" gap="2">
               <FiPlus />
-              Add New Staff
+              Add Staff
             </Button>
           }
         />

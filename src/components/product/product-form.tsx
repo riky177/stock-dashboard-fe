@@ -20,7 +20,7 @@ interface ProductFormProps {
   onSubmit: (data: CreateProductData | UpdateProductData) => Promise<void>;
   product?: Product | null;
   isEdit?: boolean;
-  trigger: (onTrigger: () => void) => React.ReactNode;
+  trigger: React.ReactNode;
 }
 
 const DefaultValueForm = {
@@ -87,10 +87,6 @@ export default function ProductForm({
     }
   };
 
-  const onTriggerClick = () => {
-    setIsOpen(true);
-  };
-
   const onCloseDialog = () => {
     setIsOpen(false);
     resetForm();
@@ -128,7 +124,9 @@ export default function ProductForm({
       onFocusOutside={onCloseDialog}
       closeOnInteractOutside={false}
     >
-      <Dialog.Trigger asChild>{trigger(onTriggerClick)}</Dialog.Trigger>
+      <Dialog.Trigger onClick={() => setIsOpen(true)} asChild>
+        {trigger}
+      </Dialog.Trigger>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>

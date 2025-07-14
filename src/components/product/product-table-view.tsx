@@ -71,19 +71,21 @@ export default function ProductTableView({
             onSubmit={onSubmit}
             product={params.data!}
             isEdit={true}
-            trigger={(onTrigger) => (
+            trigger={
               <Button
                 size="sm"
                 colorScheme="blue"
                 variant="ghost"
                 onClick={() => {
-                  onTrigger();
+                  // setTimeout(() => {
                   onEdit(params.data!);
-                }}
+                  // }, 2000);
+                  // onTrigger();
+                }} // Ensure the form opens after the click event      }}
               >
                 <FiEdit />
               </Button>
-            )}
+            }
           />
 
           <Dialog.Root>
