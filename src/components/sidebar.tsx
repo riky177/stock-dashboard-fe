@@ -50,7 +50,6 @@ export default function Sidebar({ children }: { children: ReactNode }) {
     }
   }, [isDesktop, onOpen, onClose]);
 
-  // Define keyframes for slide in animation
   const slideIn = keyframes`
     from {
       transform: translateX(-100%);
@@ -147,7 +146,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      
+
       {/* Navigation Links */}
       <Flex direction="column" gap={2}>
         {LinkItems.map((link) => {
